@@ -80,7 +80,11 @@ export default function SignIn() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
+
+                {results?.averagedModel?.length > 0 ?
+                    (
                 <Table>
+
                     <TableHead>
                         <TableRow>
                             <TableCell>
@@ -94,6 +98,7 @@ export default function SignIn() {
                             </TableCell>
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
                     {results?.averagedModel?.map((car, index) => (
                         <TableRow key={index}>
@@ -110,7 +115,7 @@ export default function SignIn() {
                     ))}
                     </TableBody>
                 </Table>
-
+                    ): null}
             </Container>
         </ThemeProvider>
     );
