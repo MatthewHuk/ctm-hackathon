@@ -11,6 +11,18 @@ const lookupData = [{
     "postcode": "PE4 7BS",
     "annualPremium": 120.9
 },{
+    "DateOfBirth": "1960-10-20",
+    "Make": "HONDA",
+    "Model": "CIVIC",
+    "postcode": "PE4 7BS",
+    "annualPremium": 50.9
+},{
+    "DateOfBirth": "1960-10-20",
+    "Make": "BMW",
+    "Model": "3 series",
+    "postcode": "PE4 7BS",
+    "annualPremium": 200.8
+},{
     "DateOfBirth": "2004-02-20",
     "Make": "FORD",
     "Model": "FIESTA eco",
@@ -54,7 +66,43 @@ const lookupData = [{
     "Model": "Focus",
     "postcode": "PE11 6BS",
     "annualPremium": 710
-}
+},{
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "Yaris",
+        "postcode": "PE4 6BS",
+        "annualPremium": 142.9
+    },{
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "Yaris",
+        "postcode": "PE4 6BS",
+        "annualPremium": 112.9
+    },{
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "Yaris",
+        "postcode": "PE4 6DS",
+        "annualPremium": 162.9
+    },{
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "prius",
+        "postcode": "PE4 6BS",
+        "annualPremium": 222.5
+    },{
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "prius",
+        "postcode": "PE4 6BS",
+        "annualPremium": 255.8
+    }, {
+        "DateOfBirth": "1960-02-20",
+        "Make": "TOYOTA",
+        "Model": "prius",
+        "postcode": "PE4 6BS",
+        "annualPremium": 180.5
+    }
 ]
 
 module.exports = {lookupData};

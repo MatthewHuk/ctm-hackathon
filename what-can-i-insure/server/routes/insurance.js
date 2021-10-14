@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {lookupData} = require("../database")
+const _ = require("lodash");
 
 /* GET root. */
 router.get('/insurance/:postcode/:age', function(req, res) {
@@ -12,8 +13,20 @@ router.get('/insurance/:postcode/:age', function(req, res) {
     const matchingDataByPostcode = matchByPostcode(postcode);
     if (matchingDataByPostcode.length > 0){
         let matchingData = matchByAge(age, matchingDataByPostcode)
+
+        let groupedModel = _.groupBy(matchingData, 'Model');
+
+        let log = JSON.stringify(groupedModel);
+        console.log({log, matchingData});
+
+        let averagedModel = Object.keys(groupedModel).map((model) => {
+
+
+            return {}
+        })
+
         if (matchingData.length > 0) {
-            res.status(200).json({postcode,age,matchingData});
+            res.status(200).json({postcode,age,groupedModel});
         }
     }
     res.sendStatus(204);
