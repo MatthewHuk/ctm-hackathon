@@ -8,7 +8,7 @@ const lookupData = [{
     "DateOfBirth": "1960-10-20",
     "Make": "HONDA",
     "Model": "VFR 800 V4 VTECH",
-    "postcode": "PE4 6BS",
+    "postcode": "PE4 7BS",
     "annualPremium": 120.9
 },{
     "DateOfBirth": "2004-02-20",
@@ -40,6 +40,21 @@ const lookupData = [{
     "Model": "Focus",
     "postcode": "PE4 6BS",
     "annualPremium": 764
-}]
+
+},{
+    "DateOfBirth": "2003-1-03",
+    "Make": "Ford",
+    "Model": "Focus",
+    "postcode": "PE13 6BS",
+    "annualPremium": 745
+},
+{
+    "DateOfBirth": "2003-1-03",
+    "Make": "Ford",
+    "Model": "Focus",
+    "postcode": "PE11 6BS",
+    "annualPremium": 710
+}
+]
 
 module.exports = {lookupData};
