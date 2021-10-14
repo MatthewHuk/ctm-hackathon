@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -24,6 +25,10 @@ export default function SignIn() {
     const [postcode,setPostcode] = React.useState("");
     const [age, setAge] = React.useState("");
     const [results, setResults] = React.useState([]);
+    const [priceRange, setPriceRange] = React.useState([0, 1000]);
+    const handleChange = (event, newValue) => {
+        setPriceRange(newValue);
+    };
 
     const getQuotes = async () => {
         const response = await Axios.get(`http://localhost:3001/insurance/${postcode}/${age}`)
@@ -81,6 +86,15 @@ export default function SignIn() {
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
 
+                <Box sx={{ width: 400 }}>
+                    <Slider
+                        getAriaLabel={() => 'Price range'}
+                        value={priceRange}
+                        onChange={handleChange}
+                        valueLabelDisplay="auto"
+                    />
+                </Box>
+
                 {results?.averagedModel?.length > 0 ?
                     (
                 <Table>
@@ -116,6 +130,7 @@ export default function SignIn() {
                     </TableBody>
                 </Table>
                     ): null}
+
             </Container>
         </ThemeProvider>
     );
