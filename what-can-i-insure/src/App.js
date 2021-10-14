@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from "axios";
-import {Table, TableRow, TableCell, TableHead} from "@mui/material";
+import {Table, TableRow, TableCell, TableHead, TableBody} from "@mui/material";
 
 function Copyright(props) {
     return (
@@ -37,14 +37,14 @@ export default function SignIn() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 2,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
                     <img src={"/CTM Logo.png"} />
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" style={{marginTop: "20px"}} variant="h5">
                         What cars can you insure?
                     </Typography>
                     <Box component="form" noValidate sx={{ mt: 1 }}>
@@ -94,7 +94,8 @@ export default function SignIn() {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    {results?.matchingData?.map((car, index) => (
+                    <TableBody>
+                    {results?.averagedModel?.map((car, index) => (
                         <TableRow key={index}>
                             <TableCell>
                                 {car.Make}
@@ -107,6 +108,7 @@ export default function SignIn() {
                             </TableCell>
                         </TableRow>
                     ))}
+                    </TableBody>
                 </Table>
 
             </Container>

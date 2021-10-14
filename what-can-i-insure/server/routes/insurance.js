@@ -21,12 +21,20 @@ router.get('/insurance/:postcode/:age', function(req, res) {
 
         let averagedModel = Object.keys(groupedModel).map((model) => {
 
+            let sumPrice = 0;
+            groupedModel[model].forEach((car) => {
+                sumPrice += car.annualPremium
+            });
 
-            return {}
-        })
+            let m = groupedModel[model][0];
+            let averageByModel = sumPrice / groupedModel[model].length;
+            return {Make: m.Make, Model: m.Model, annualPremium: averageByModel}
+        });
+
+        console.log({averagedModel});
 
         if (matchingData.length > 0) {
-            res.status(200).json({postcode,age,groupedModel});
+            res.status(200).json({postcode,age,averagedModel});
         }
     }
     res.sendStatus(204);
