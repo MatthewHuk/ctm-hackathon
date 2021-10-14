@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // Routes
 const indexRouter = require('./routes/index');
+const insuranceRouter = require('./routes/insurance');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 // Use routes
 app.use('/', indexRouter);
+app.use('/', insuranceRouter);
 
 const port = normalizePort(process.env.PORT || '3001');
 let server = httpServer.createServer(app);
