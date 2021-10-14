@@ -22,6 +22,24 @@ const lookupData = [{
     "Model": "CORSA",
     "postcode": "LE2 7BG",
     "annualPremium": 600.9
+},{
+    "DateOfBirth": "2003-7-20",
+    "Make": "Ford",
+    "Model": "Focus",
+    "postcode": "PE4 6BS",
+    "annualPremium": 752
+},{
+    "DateOfBirth": "2003-7-12",
+    "Make": "Ford",
+    "Model": "Focus",
+    "postcode": "PE4 6BS",
+    "annualPremium": 820
+},{
+    "DateOfBirth": "2003-1-03",
+    "Make": "Ford",
+    "Model": "Focus",
+    "postcode": "PE4 6BS",
+    "annualPremium": 764
 }]
 
 module.exports = {lookupData};
