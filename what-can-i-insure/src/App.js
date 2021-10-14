@@ -25,14 +25,31 @@ export default function SignIn() {
     const [postcode,setPostcode] = React.useState("");
     const [age, setAge] = React.useState("");
     const [results, setResults] = React.useState([]);
-    const [priceRange, setPriceRange] = React.useState([0, 1000]);
+    const [priceRange, setPriceRange] = React.useState([0, 400]);
+    const [filteredCars, setFilteredCars] = React.useState([]);
+
     const handleChange = (event, newValue) => {
         setPriceRange(newValue);
+        if(results.averagedModel){
+            filterCarsQuotes(results.averagedModel, covertRangeToPrice(newValue[0]), covertRangeToPrice(newValue[1]));
+        }
     };
+
+    const filterCarsQuotes = (carQuotes, lower, higher) => {
+        const filtered = carQuotes.filter((car) => car.annualPremium >= lower && car.annualPremium <= higher)
+        setFilteredCars(filtered);
+    }
+
+    const covertRangeToPrice = (range) => {
+        return Math.round(range*range/200.0);
+    }
 
     const getQuotes = async () => {
         const response = await Axios.get(`http://localhost:3001/insurance/${postcode}/${age}`)
         console.log(response);
+        if(response.data.averagedModel){
+            filterCarsQuotes(response.data.averagedModel, covertRangeToPrice(priceRange[0]), covertRangeToPrice(priceRange[1]));
+        }
         setResults(response.data);
     }
 
@@ -87,15 +104,20 @@ export default function SignIn() {
                 <Copyright sx={{ mt: 8, mb: 4 }} />
 
                 <Box sx={{ width: 400 }}>
+                    <Typography component="h3" style={{marginTop: "20px"}} variant="subtitle">
+                        Set your price range
+                    </Typography>
                     <Slider
                         getAriaLabel={() => 'Price range'}
                         value={priceRange}
                         onChange={handleChange}
                         valueLabelDisplay="auto"
+                        max={1000}
+                        scale={(x) => covertRangeToPrice(x)}
                     />
                 </Box>
 
-                {results?.averagedModel?.length > 0 ?
+                {filteredCars?.length > 0 ?
                     (
                 <Table>
 
@@ -114,7 +136,7 @@ export default function SignIn() {
                     </TableHead>
 
                     <TableBody>
-                    {results?.averagedModel?.map((car, index) => (
+                    {filteredCars?.sort((a, b) => a.annualPremium - b.annualPremium).map((car, index) => (
                         <TableRow key={index}>
                             <TableCell>
                                 {car.Make}
@@ -130,7 +152,7 @@ export default function SignIn() {
                     </TableBody>
                 </Table>
                     ): null}
-
+                <div style={{height:"100vh"}}></div>
             </Container>
         </ThemeProvider>
     );
