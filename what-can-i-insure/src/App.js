@@ -29,6 +29,7 @@ export default function SignIn() {
 
     const getQuotes = async () => {
         const response = await Axios.get(`http://localhost:3001/insurance/${postcode}/${age}`)
+        console.log(response);
         setResults(response.data);
     }
 
@@ -83,7 +84,7 @@ export default function SignIn() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
-                {results.length>0 ? <Table>
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>
@@ -97,7 +98,7 @@ export default function SignIn() {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    {results.map((car, index) => {
+                    {results?.matchingData?.map((car, index) => (
                         <TableRow key={index}>
                             <TableCell>
                                 {car.Make}
@@ -109,8 +110,8 @@ export default function SignIn() {
                                 {car.annualPremium}
                             </TableCell>
                         </TableRow>
-                    })}
-                </Table>:null}
+                    ))}
+                </Table>
 
             </Container>
         </ThemeProvider>
