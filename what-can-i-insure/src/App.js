@@ -13,7 +13,7 @@ import {Table, TableRow, TableCell, TableHead, TableBody} from "@mui/material";
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            Disclaimer: this is estimated data based on your area, and not an offer of insurance.
+            Disclaimer: This is estimated data based on your area, and not an offer of insurance.
         </Typography>
     );
 }
