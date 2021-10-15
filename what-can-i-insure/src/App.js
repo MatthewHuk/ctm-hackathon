@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from "axios";
-import {Table, TableRow, TableCell, TableHead, TableBody} from "@mui/material";
+import {Table, TableRow, TableCell, TableHead, TableBody, Link} from "@mui/material";
 
 function Copyright(props) {
     return (
@@ -116,13 +116,18 @@ export default function SignIn() {
                         scale={(x) => covertRangeToPrice(x)}
                     />
                 </Box>
-
+            </Container>
+            <Container component="div" >
+                <Box >
                 {filteredCars?.length > 0 ?
                     (
                 <Table>
 
                     <TableHead>
                         <TableRow>
+                            <TableCell>
+                                Image
+                            </TableCell>
                             <TableCell>
                                 Make
                             </TableCell>
@@ -132,12 +137,18 @@ export default function SignIn() {
                             <TableCell>
                                 Average premium
                             </TableCell>
+                            <TableCell>
+                                Affiliate links
+                            </TableCell>
                         </TableRow>
                     </TableHead>
 
                     <TableBody>
                     {filteredCars?.sort((a, b) => a.annualPremium - b.annualPremium).map((car, index) => (
                         <TableRow key={index}>
+                            <TableCell>
+                                <img src={"/carimg.jpeg"} height={"100px"}/>
+                            </TableCell>
                             <TableCell>
                                 {car.Make}
                             </TableCell>
@@ -147,12 +158,18 @@ export default function SignIn() {
                             <TableCell>
                                 {car.annualPremium}
                             </TableCell>
+                            <TableCell>
+                                <Link >Carwow</Link>
+                                <br/>
+                                <Link >AutoTrader</Link>
+                            </TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
                 </Table>
                     ): null}
                 <div style={{height:"100vh"}}></div>
+                </Box>
             </Container>
         </ThemeProvider>
     );
