@@ -12,12 +12,14 @@ router.get('/insurance/:postcode/:age', async function(req, res) {
     res.contentType("application/json");
 
     // call to other backend with postcode and dist in meters
-    const { data: prices } = await axios.get(`http://localhost:5822/v1/car-enquiry/${postcode}`);
+    const { data } = await axios.get(`http://localhost:5823/v1/enquiry/${postcode}`);
+
+    let {latitude,longitude, carsEnquiries} = data
 
     // filter by age if age is given
 
-    if (prices.length > 0){
-        let matchingData = matchByAge(age, prices)
+    if (carsEnquiries.length > 0){
+        let matchingData = matchByAge(age, carsEnquiries)
 
         let groupedModel = _.groupBy(matchingData, 'Model');
 
@@ -39,7 +41,7 @@ router.get('/insurance/:postcode/:age', async function(req, res) {
         console.log({averagedModel});
 
         if (matchingData.length > 0) {
-            return res.status(200).json({postcode,age,averagedModel});
+            return res.status(200).json({postcode,latitude, longitude, age,averagedModel});
         }
     }
     res.sendStatus(204);
