@@ -102,7 +102,7 @@ export default function SignIn() {
                         </Button>
 
                     </Box>
-                    <MapDisplay sourcePoint={{postcode:postcode, lat:null, lon:null, radius:5000}}/>
+                    <MapDisplay sourcePoint={{postcode:postcode, lat:results.latitude, lon:results.longitude, radius:5000}}/>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
 

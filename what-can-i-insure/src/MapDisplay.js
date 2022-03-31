@@ -5,21 +5,30 @@ import {Table, TableRow, TableCell, TableHead, TableBody, Link} from "@mui/mater
 
 
 export const MapDisplay = ({sourcePoint}) => {
-    return (
 
-        <MapContainer  style={{ height:"600px", width:"1000px" }} center={[51.505, -0.09]} zoom={12}>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={[51.505, -0.09]}>
-                <Popup>
-                    your postcode search <br /> {sourcePoint.postcode}
-                </Popup>
-            </Marker>
-            <Polygon pathOptions={{ color: 'purple' }} positions={createPolygon(51.505, -0.09,5000)} />
-        </MapContainer>
-    )
+
+
+    if (sourcePoint.lat && sourcePoint.lon) {
+        console.log(sourcePoint.lat)
+        console.log(sourcePoint.lon)
+        return (
+
+            <MapContainer style={{height: "600px", width: "1000px"}} center={[sourcePoint.lat, sourcePoint.lon]}
+                          zoom={12}>
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[sourcePoint.lat, sourcePoint.lon]}>
+                    <Popup>
+                        your postcode search <br/> {sourcePoint.postcode}
+                    </Popup>
+                </Marker>
+                <Polygon pathOptions={{color: 'purple'}} positions={createPolygon(sourcePoint.lat, sourcePoint.lon, 5000)}/>
+            </MapContainer>
+        )
+    }
+    else return null
 }
 
 const createPolygon = (sourceLat, sourceLon, radius, tess = 40.0) => {
