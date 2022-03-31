@@ -9,6 +9,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from "axios";
 import {Table, TableRow, TableCell, TableHead, TableBody, Link} from "@mui/material";
+import {MapDisplay} from "./MapDisplay";
 
 function Copyright(props) {
     return (
@@ -69,6 +70,7 @@ export default function SignIn() {
                     <Typography component="h1" style={{marginTop: "20px"}} variant="h5">
                         What cars can you insure?
                     </Typography>
+
                     <Box component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -100,6 +102,7 @@ export default function SignIn() {
                         </Button>
 
                     </Box>
+                    <MapDisplay sourcePoint={{postcode:postcode, lat:null, lon:null, radius:5000}}/>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
 
