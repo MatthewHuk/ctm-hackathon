@@ -2,17 +2,22 @@ const express = require('express');
 const router = express.Router();
 const {lookupData} = require("../database")
 const _ = require("lodash");
+const axios = require("axios");
 
 /* GET root. */
-router.get('/insurance/:postcode/:age', function(req, res) {
+router.get('/insurance/:postcode/:age', async function(req, res) {
     const postcode = req.params?.postcode;
     const age = req.params?.age;
     
     res.contentType("application/json");
-    dateOfBirthToAge(lookupData[0].DateOfBirth);
-    const matchingDataByPostcode = matchByPostcode(postcode);
-    if (matchingDataByPostcode.length > 0){
-        let matchingData = matchByAge(age, matchingDataByPostcode)
+
+    // call to other backend with postcode and dist in meters
+    const { data: prices } = await axios.get(`http://localhost:5822/v1/car-enquiry/${postcode}`);
+
+    // filter by age if age is given
+
+    if (prices.length > 0){
+        let matchingData = matchByAge(age, prices)
 
         let groupedModel = _.groupBy(matchingData, 'Model');
 
@@ -28,27 +33,20 @@ router.get('/insurance/:postcode/:age', function(req, res) {
 
             let m = groupedModel[model][0];
             let averageByModel = sumPrice / groupedModel[model].length;
-            return {Make: m.Make, Model: m.Model, annualPremium: averageByModel}
+            return {Make: m.Make, Model: m.Model, annualPremium: averageByModel.toFixed(2)}
         });
 
         console.log({averagedModel});
 
         if (matchingData.length > 0) {
-            res.status(200).json({postcode,age,averagedModel});
+            return res.status(200).json({postcode,age,averagedModel});
         }
     }
     res.sendStatus(204);
 });
 
-const matchByPostcode = postcode => {
-    const outerPostcode = postcode.split(' ')[0];
-    const matchesByPostcode = lookupData.filter(data => data.postcode.split(' ')[0] === outerPostcode)
-
-    return matchesByPostcode;
-}
-
-const matchByAge = (queryAge, matchesByPostcode, tolerance) => {
-    return matchesByPostcode.filter(data => dateOfBirthToAge(data.DateOfBirth) === Number(queryAge));
+const matchByAge = (queryAge, prices, tolerance) => {
+    return prices.filter(data => dateOfBirthToAge(data.DateOfBirth) === Number(queryAge));
 }
 
 const dateOfBirthToAge = dateOfBirth => {
