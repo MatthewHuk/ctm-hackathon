@@ -12,7 +12,7 @@ router.get('/insurance/:postcode/:age', async function(req, res) {
     res.contentType("application/json");
 
     // call to other backend with postcode and dist in meters
-    const { data } = await axios.get(`http://localhost:5823/v1/enquiry/${postcode}`);
+    const { data } = await axios.get(`http://localhost:3001/enquiry/${postcode}`);
 
     let {latitude,longitude, carsEnquiries} = data
 

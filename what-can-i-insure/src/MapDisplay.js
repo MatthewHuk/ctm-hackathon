@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {MapContainer, TileLayer, Marker, Popup, Polygon, CircleMarker} from 'react-leaflet'
 
-import {Table, TableRow, TableCell, TableHead, TableBody, Link} from "@mui/material";
-
 
 export const MapDisplay = ({sourcePoint}) => {
 
