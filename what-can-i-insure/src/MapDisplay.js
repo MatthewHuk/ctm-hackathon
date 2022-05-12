@@ -22,6 +22,8 @@ export const MapDisplay = ({sourcePoint}) => {
                 <Marker position={[sourcePoint.lat, sourcePoint.lon]}>
                     <Popup>
                         your postcode search <br/> {sourcePoint.postcode}
+                    <span>&nbsp;&nbsp;</span>
+                    <a href="https://youtu.be/dQw4w9WgXcQ">location preview</a>
                     </Popup>
                 </Marker>
                 <Polygon pathOptions={{color: 'purple'}} positions={createPolygon(sourcePoint.lat, sourcePoint.lon, 5000)}/>
