@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import QuickEnquiry from "./QuickEnquiry";
+import Counties from "./Counties";
 
 
 
@@ -18,8 +19,8 @@ export default function App() {
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                   <Routes>
-                    <Route path="/" element={<QuickEnquiry />}>
-                    </Route>
+                      <Route path="/" element={<QuickEnquiry />}/>
+                      <Route path="/counties" element={<Counties />}/>
                 </Routes>
             </Container>
             </Router>
