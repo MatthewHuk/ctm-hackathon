@@ -38,6 +38,16 @@ function carEnquiriesByLocation (Lon, Lat) {
   }, 'storeSearchableEnquiry');
 }
 
+function carEnquiriesAll () {
+  return timedMongoCommand(async (db) => {
+    console.log("getting all car enquiries")
+    const results = await db.collection('searchable_car_enquiry')
+        .find({}).toArray()
+    console.log("all car enquiry results: ",results);
+    return results;
+  }, 'storeSearchableEnquiry');
+}
+
 function storeProviderCycles (cycles) {
   return timedMongoCommand(db => {
     return db.collection(providerDeploymentCycle)
@@ -167,5 +177,6 @@ module.exports = {
   deleteProviderDeploymentLogData,
   getLatestDeploymentAndCycles,
   searchableCarEnquiry,
-  carEnquiriesByLocation
+  carEnquiriesByLocation,
+  carEnquiriesAll
 };

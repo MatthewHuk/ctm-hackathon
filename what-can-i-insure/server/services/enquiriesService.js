@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {carEnquiriesByLocation} = require("./db");
+const {carEnquiriesByLocation, carEnquiriesAll} = require("./db");
 
 
 const carEnquiriesInPostcode = async (postcode) => {
@@ -18,4 +18,11 @@ const carEnquiriesInPostcode = async (postcode) => {
     }
 }
 
-module.exports = {carEnquiriesInPostcode}
+const getCarEnquiriesAll = async () => {
+
+    const carsEnquiries = await carEnquiriesAll();
+
+    return carsEnquiries
+}
+
+module.exports = {carEnquiriesInPostcode, getCarEnquiriesAll}
