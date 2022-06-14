@@ -45,7 +45,37 @@ function carEnquiriesAll () {
         .find({}).toArray()
     console.log("all car enquiry results: ",results);
     return results;
-  }, 'storeSearchableEnquiry');
+  }, 'carEnquiriesAll');
+}
+
+async function carEnquiriesPerCounty (multiPolygon) {
+  // let polyLength = multiPolygon[0].length
+  // if (polyLength > 500){
+  //   const mod = Math.floor(polyLength / 200)
+  //   multiPolygon[0] = multiPolygon[0].filter((c, i, a)=> i%mod == 0|| a.length-1 === i)
+  //   polyLength = multiPolygon[0].length
+  // }
+  //
+  // if (multiPolygon[0][0][0] !== multiPolygon[0][polyLength-1][0] || multiPolygon[0][0][1] !== multiPolygon[0][polyLength-1][1]){
+  //   multiPolygon[0] = [...multiPolygon[0], multiPolygon[0][0]]
+  // }
+
+    // return timedMongoCommand(async (db) => {
+    const db = global.mongo.db("deploymentService");
+      // console.log("getting car enquiries in the county", multiPolygon)
+      const results = await db.collection('searchable_car_enquiry')
+          .find({locale: {
+              $geoWithin:{
+                $geometry:{
+                  type: "MultiPolygon",
+                  coordinates: [multiPolygon]
+                }
+              }}}).toArray()
+      // console.log("all car results within polygon: ",results);
+      return results;
+    // }, 'carEnquiriesPerCounty');
+
+
 }
 
 function storeProviderCycles (cycles) {
@@ -178,5 +208,6 @@ module.exports = {
   getLatestDeploymentAndCycles,
   searchableCarEnquiry,
   carEnquiriesByLocation,
-  carEnquiriesAll
+  carEnquiriesAll,
+  carEnquiriesPerCounty
 };

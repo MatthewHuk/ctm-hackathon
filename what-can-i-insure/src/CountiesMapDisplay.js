@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {MapContainer, GeoJSON, TileLayer, Marker, Popup, Polygon, CircleMarker} from 'react-leaflet'
-import England from "./data/England-Counties.json"
+import England from "./data/England-Counties-filtered.json"
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -24,37 +24,9 @@ const stylesFunction = (feature) => {
 
 export const CountiesMapDisplay = () => {
     const [count, setCount] = useState(0)
-    const [geojson, setGeojson] = useState()
 
-    useEffect(async ()=> {
-        var response = await axios.get("http://localhost:3001/enquiry/all");
-        console.log(response.data);
-        var englandGeojson = {...England};
-        englandGeojson.features = englandGeojson.features.map(feature => {
-            return {
-                ...feature,
-                properties: {
-                    ...feature.properties,
-                    color: "blue",
-                    nEnquiries:0,
-                    totalPremium:0,
-                    averagePremium:0
-                }
-            }
-        })
-        response.data.forEach(enq => {
-            const f = englandGeojson.features[Math.floor(Math.random() * englandGeojson.features.length)]
-            f.properties.nEnquiries++;
-            f.properties.totalPremium+=enq.annualPremium;
-        });
-        englandGeojson.features.forEach((feature)=>{
-            const avg = feature.properties.totalPremium/ feature.properties.nEnquiries;
-            feature.properties.averagePremium = avg;
-            feature.properties.color = colors(avg);
-        })
-        setGeojson(englandGeojson);
-    }, [])
-
+    const geojson = useCarsWithinCounty();
+    console.log(geojson)
     return (
 <>
         <MapContainer style={{height: "600px", width: "1000px"}} center={[52, -0.5]}
@@ -86,4 +58,84 @@ export const CountiesMapDisplay = () => {
         <button onClick={()=> setCount(count+1)}>click me {count}</button>
 </>
     )
+}
+
+const useCarsWithinCounty = () => {
+    const [geojson, setGeojson] = useState()
+
+    useEffect(async ()=> {
+        const englandGeojson = {...England};
+        englandGeojson.features = await Promise.all(englandGeojson.features.map(async feature => {
+            try {
+                const {data} = await axios.post("http://localhost:3001/enquiry/county", feature.geometry.coordinates);
+                console.log(data)
+                const nEnquiries = data.length
+                const totalPremium = data.reduce((a, b) => a+b.annualPremium, 0)
+                const averagePremium = totalPremium/nEnquiries
+                return {
+                    ...feature,
+                    properties: {
+                        ...feature.properties,
+                        //color: "blue",
+                        nEnquiries:nEnquiries,
+                        totalPremium:totalPremium,
+                        averagePremium:averagePremium,
+                        color: colors(averagePremium)
+                    }
+                }
+            }
+            catch(err){
+                console.log(err)
+                return {
+                    ...feature,
+                    properties: {
+                        ...feature.properties,
+                        color: "blue",
+                    }
+                }
+            }
+
+        }))
+        console.log(englandGeojson)
+        setGeojson(englandGeojson);
+    }, [])
+
+    return geojson
+}
+
+
+
+const useCarsByCountyRandom = () => {
+    const [geojson, setGeojson] = useState()
+
+    useEffect(async ()=> {
+        var response = await axios.get("http://localhost:3001/enquiry/all");
+        console.log(response.data);
+        var englandGeojson = {...England};
+        englandGeojson.features = englandGeojson.features.map(feature => {
+            return {
+                ...feature,
+                properties: {
+                    ...feature.properties,
+                    color: "blue",
+                    nEnquiries:0,
+                    totalPremium:0,
+                    averagePremium:0
+                }
+            }
+        })
+        response.data.forEach(enq => {
+            const f = englandGeojson.features[Math.floor(Math.random() * englandGeojson.features.length)]
+            f.properties.nEnquiries++;
+            f.properties.totalPremium+=enq.annualPremium;
+        });
+        englandGeojson.features.forEach((feature)=>{
+            const avg = feature.properties.totalPremium/ feature.properties.nEnquiries;
+            feature.properties.averagePremium = avg;
+            feature.properties.color = colors(avg);
+        })
+        setGeojson(englandGeojson);
+    }, [])
+
+    return geojson
 }
