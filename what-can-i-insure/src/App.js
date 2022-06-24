@@ -16,7 +16,7 @@ export default function App() {
     return (
         <ThemeProvider theme={theme}>
             <Router>
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="lg">
                 <CssBaseline />
                   <Routes>
                       <Route path="/" element={<QuickEnquiry />}/>

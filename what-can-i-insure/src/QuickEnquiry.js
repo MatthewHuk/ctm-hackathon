@@ -63,7 +63,7 @@ export default function QuickEnquiry() {
                         alignItems: 'center',
                     }}
                 >
-                    <img src={"/CTM Logo.png"} />
+                    <img src={"/CTM-Logo.png"} />
                     <Typography component="h1" style={{marginTop: "20px"}} variant="h5">
                         What cars can you insure?
                     </Typography>

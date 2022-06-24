@@ -35,7 +35,7 @@ export default function Counties() {
                         alignItems: 'center',
                     }}
                 >
-                    <img src={"/CTM Logo.png"} />
+                    <img src={"/CTM-Logo.png"} />
                     <Typography component="h1" style={{marginTop: "20px"}} variant="h5">
                         Average quotes by county
                     </Typography>
