@@ -26,6 +26,7 @@ export default function QuickEnquiry() {
     const [results, setResults] = React.useState([]);
     const [priceRange, setPriceRange] = React.useState([0, 400]);
     const [filteredCars, setFilteredCars] = React.useState([]);
+    const [error, setError] = React.useState();
 
     const handleChange = (event, newValue) => {
         setPriceRange(newValue);
@@ -44,12 +45,18 @@ export default function QuickEnquiry() {
     }
 
     const getQuotes = async () => {
-        const response = await Axios.get(`http://localhost:3001/insurance/${postcode}/${age}`)
-        console.log(response);
-        if(response.data.averagedModel){
-            filterCarsQuotes(response.data.averagedModel, covertRangeToPrice(priceRange[0]), covertRangeToPrice(priceRange[1]));
+        try {
+            const response = await Axios.get(`http://localhost:3001/insurance/${postcode}/${age}`)
+            console.log(response);
+            if(response.data.averagedModel){
+                filterCarsQuotes(response.data.averagedModel, covertRangeToPrice(priceRange[0]), covertRangeToPrice(priceRange[1]));
+            }
+            setResults(response.data);
+            setError(undefined)
+        }catch (err){
+            setError("Postcode not found")
         }
-        setResults(response.data);
+
     }
 
     return (
@@ -115,6 +122,7 @@ export default function QuickEnquiry() {
                         max={1000}
                         scale={(x) => covertRangeToPrice(x)}
                     />
+                    <Typography variant={"body1"} color={"red"}>{error}</Typography>
                 </Box>
             </Container>
             <Container component="div" >

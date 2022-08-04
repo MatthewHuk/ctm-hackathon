@@ -13,8 +13,8 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 const indexRouter = require('./routes/index');
 const insuranceRouter = require('./routes/insurance');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: true}));
 app.options('*', cors())

@@ -48,7 +48,7 @@ function carEnquiriesAll () {
   }, 'carEnquiriesAll');
 }
 
-async function carEnquiriesPerCounty (multiPolygon) {
+async function carEnquiriesPerCounty (polyData) {
   // let polyLength = multiPolygon[0].length
   // if (polyLength > 500){
   //   const mod = Math.floor(polyLength / 200)
@@ -61,14 +61,19 @@ async function carEnquiriesPerCounty (multiPolygon) {
   // }
 
     // return timedMongoCommand(async (db) => {
+    let multiPolygon = [polyData];
+    if (Array.isArray(polyData[0][0][0])){
+      multiPolygon = polyData;
+    }
     const db = global.mongo.db("deploymentService");
+
       // console.log("getting car enquiries in the county", multiPolygon)
       const results = await db.collection('searchable_car_enquiry')
           .find({locale: {
               $geoWithin:{
                 $geometry:{
                   type: "MultiPolygon",
-                  coordinates: [multiPolygon]
+                  coordinates: multiPolygon
                 }
               }}}).toArray()
       // console.log("all car results within polygon: ",results);

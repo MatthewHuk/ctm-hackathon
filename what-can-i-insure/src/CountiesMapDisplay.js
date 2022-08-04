@@ -69,18 +69,13 @@ const useCarsWithinCounty = () => {
             try {
                 const {data} = await axios.post("http://localhost:3001/enquiry/county", feature.geometry.coordinates);
                 console.log(data)
-                const nEnquiries = data.length
-                const totalPremium = data.reduce((a, b) => a+b.annualPremium, 0)
-                const averagePremium = totalPremium/nEnquiries
+
                 return {
                     ...feature,
                     properties: {
                         ...feature.properties,
                         //color: "blue",
-                        nEnquiries:nEnquiries,
-                        totalPremium:totalPremium,
-                        averagePremium:averagePremium,
-                        color: colors(averagePremium)
+                        color: colors(data.averagePremium)
                     }
                 }
             }
@@ -97,43 +92,6 @@ const useCarsWithinCounty = () => {
 
         }))
         console.log(englandGeojson)
-        setGeojson(englandGeojson);
-    }, [])
-
-    return geojson
-}
-
-
-
-const useCarsByCountyRandom = () => {
-    const [geojson, setGeojson] = useState()
-
-    useEffect(async ()=> {
-        var response = await axios.get("http://localhost:3001/enquiry/all");
-        console.log(response.data);
-        var englandGeojson = {...England};
-        englandGeojson.features = englandGeojson.features.map(feature => {
-            return {
-                ...feature,
-                properties: {
-                    ...feature.properties,
-                    color: "blue",
-                    nEnquiries:0,
-                    totalPremium:0,
-                    averagePremium:0
-                }
-            }
-        })
-        response.data.forEach(enq => {
-            const f = englandGeojson.features[Math.floor(Math.random() * englandGeojson.features.length)]
-            f.properties.nEnquiries++;
-            f.properties.totalPremium+=enq.annualPremium;
-        });
-        englandGeojson.features.forEach((feature)=>{
-            const avg = feature.properties.totalPremium/ feature.properties.nEnquiries;
-            feature.properties.averagePremium = avg;
-            feature.properties.color = colors(avg);
-        })
         setGeojson(englandGeojson);
     }, [])
 

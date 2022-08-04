@@ -3,6 +3,7 @@ const router = express.Router();
 const {lookupData} = require("../database")
 const _ = require("lodash");
 const axios = require("axios");
+const {carEnquiriesInPostcode} = require("../services/enquiriesService");
 
 /* GET root. */
 router.get('/insurance/:postcode/:age', async function(req, res) {
@@ -12,39 +13,44 @@ router.get('/insurance/:postcode/:age', async function(req, res) {
     res.contentType("application/json");
 
     // call to other backend with postcode and dist in meters
-    const { data } = await axios.get(`http://localhost:3001/enquiry/${postcode}`);
+    // const { data } = await axios.get(`http://localhost:3001/enquiry/${postcode}`);
+    try {
+        const CarEnquiriesResponse = await carEnquiriesInPostcode(postcode);
+        let {latitude,longitude, carsEnquiries} = CarEnquiriesResponse
 
-    let {latitude,longitude, carsEnquiries} = data
+        // filter by age if age is given
 
-    // filter by age if age is given
+        if (carsEnquiries.length > 0){
+            let matchingData = matchByAge(age, carsEnquiries)
 
-    if (carsEnquiries.length > 0){
-        let matchingData = matchByAge(age, carsEnquiries)
+            let groupedModel = _.groupBy(matchingData, 'Model');
 
-        let groupedModel = _.groupBy(matchingData, 'Model');
+            let log = JSON.stringify(groupedModel);
+            console.log({log, matchingData});
 
-        let log = JSON.stringify(groupedModel);
-        console.log({log, matchingData});
+            let averagedModel = Object.keys(groupedModel).map((model) => {
 
-        let averagedModel = Object.keys(groupedModel).map((model) => {
+                let sumPrice = 0;
+                groupedModel[model].forEach((car) => {
+                    sumPrice += car.annualPremium
+                });
 
-            let sumPrice = 0;
-            groupedModel[model].forEach((car) => {
-                sumPrice += car.annualPremium
+                let m = groupedModel[model][0];
+                let averageByModel = sumPrice / groupedModel[model].length;
+                return {Make: m.Make, Model: m.Model, annualPremium: averageByModel.toFixed(2)}
             });
 
-            let m = groupedModel[model][0];
-            let averageByModel = sumPrice / groupedModel[model].length;
-            return {Make: m.Make, Model: m.Model, annualPremium: averageByModel.toFixed(2)}
-        });
+            console.log({averagedModel});
 
-        console.log({averagedModel});
-
-        if (matchingData.length > 0) {
-            return res.status(200).json({postcode,latitude, longitude, age,averagedModel});
+            if (matchingData.length > 0) {
+                return res.status(200).json({postcode,latitude, longitude, age,averagedModel});
+            }
         }
+        res.sendStatus(204);
+    } catch (err){
+        res.status(404).json({Message:"postcode not valid"});
     }
-    res.sendStatus(204);
+
 });
 
 const matchByAge = (queryAge, prices, tolerance) => {
