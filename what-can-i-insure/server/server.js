@@ -3,7 +3,6 @@ const cookieParser = require('cookie-parser');
 const httpServer = require('http');
 const app = express();
 const normalizePort = require("./helpers/normalizePort")
-const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 const mongo = require('./helpers/mongoSetup');
 
